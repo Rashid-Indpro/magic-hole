@@ -8,9 +8,29 @@ import {
   COLLISION_DISTANCE_THRESHOLD, 
   POINTS_PER_CAR,
   HOLE_MIN_RADIUS_TO_EAT,
+  SMALL_CAR_SIZE,
+  MEDIUM_CAR_SIZE,
+  SMALL_CAR_POINTS,
+  MEDIUM_CAR_POINTS,
+  LARGE_CAR_POINTS,
 } from '../config/constants';
 import { growHole } from '../entities/Hole';
 import { removeBodyFromWorld } from './PhysicsSystem';
+
+/**
+ * Calculate points based on car size
+ * @param {number} carSize - Size of the car
+ * @returns {number} Points awarded
+ */
+const getPointsForCarSize = (carSize) => {
+  if (carSize < SMALL_CAR_SIZE) {
+    return SMALL_CAR_POINTS; // 10 points
+  } else if (carSize < MEDIUM_CAR_SIZE) {
+    return MEDIUM_CAR_POINTS; // 25 points
+  } else {
+    return LARGE_CAR_POINTS; // 50 points
+  }
+};
 
 /**
  * Checks if hole is big enough to eat a car
@@ -35,6 +55,14 @@ const canEatCar = (holeRadius, carSize) => {
  */
 export const CollisionSystem = (entities, { dispatch }) => {
   if (!entities.hole) {
+    return entities;
+  }
+
+  // Only process collisions if game is playing
+  const isPlaying = entities.timer?.gameState === 'playing' || 
+                    entities.levelTracker?.gameState === 'playing';
+  
+  if (!isPlaying) {
     return entities;
   }
 
@@ -77,8 +105,12 @@ export const CollisionSystem = (entities, { dispatch }) => {
           entity.body.physicsBody = null;
         }
         
+        // Calculate points based on car size
+        const carSize = entity.body.size || 0;
+        const points = getPointsForCarSize(carSize);
+        
         // Accumulate points
-        totalPoints += POINTS_PER_CAR;
+        totalPoints += points;
         carsEaten++;
       }
     });

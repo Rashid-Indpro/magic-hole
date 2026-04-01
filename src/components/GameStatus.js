@@ -5,7 +5,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
-import { GAME_STATE, FADE_DURATION, SCREEN_WIDTH, SCREEN_HEIGHT } from '../config/constants';
+import { GAME_STATE, FADE_DURATION, SCREEN_WIDTH, SCREEN_HEIGHT, LEVEL_TARGET_SCORE } from '../config/constants';
 
 const GameStatus = ({ gameState, score, carsEaten, onRestart }) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -63,14 +63,24 @@ const GameStatus = ({ gameState, score, carsEaten, onRestart }) => {
         {/* Status Message */}
         <Text style={styles.message}>
           {isWin 
-            ? `You ate all ${carsEaten} cars!` 
-            : 'Time ran out!'}
+            ? `You scored ${score} points!` 
+            : `Only scored ${score}/${LEVEL_TARGET_SCORE} points`}
         </Text>
 
         {/* Score Display */}
         <View style={styles.scoreContainer}>
           <Text style={styles.scoreLabel}>FINAL SCORE</Text>
           <Text style={styles.scoreValue}>{score}</Text>
+          {isWin && (
+            <Text style={styles.targetMet}>
+              ✓ Target: {LEVEL_TARGET_SCORE} pts
+            </Text>
+          )}
+          {!isWin && (
+            <Text style={styles.targetMissed}>
+              ✗ Target: {LEVEL_TARGET_SCORE} pts
+            </Text>
+          )}
         </View>
 
         {/* Stats */}
@@ -164,6 +174,18 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: 'bold',
     color: '#4B0082',
+  },
+  targetMet: {
+    fontSize: 14,
+    color: '#4CAF50',
+    marginTop: 8,
+    fontWeight: '600',
+  },
+  targetMissed: {
+    fontSize: 14,
+    color: '#F44336',
+    marginTop: 8,
+    fontWeight: '600',
   },
   statsContainer: {
     flexDirection: 'row',

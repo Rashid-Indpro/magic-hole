@@ -73,14 +73,24 @@ export const COLORS = {
 export const COLLISION_DISTANCE_THRESHOLD = 1.2; // Multiplier for collision detection (1.0 = touching, >1.0 = more forgiving)
 
 // Score Configuration
-export const POINTS_PER_CAR = 10; // Points awarded for eating a car
+export const POINTS_PER_CAR = 10; // Base points (deprecated - using size-based)
 export const INITIAL_SCORE = 0;
+
+// Size-based Scoring (bigger cars = more points, but harder to eat)
+export const SMALL_CAR_SIZE = 50;  // Cars smaller than 50
+export const MEDIUM_CAR_SIZE = 65; // Cars between 50-65
+export const SMALL_CAR_POINTS = 3;    // Easy to eat, low points (reduced from 5)
+export const MEDIUM_CAR_POINTS = 10;  // Medium difficulty, medium points (reduced from 15)
+export const LARGE_CAR_POINTS = 20;   // Hard to eat (need big hole), high points (reduced from 30)
 
 // Hole Growth Configuration
 export const HOLE_MIN_RADIUS = 40; // Minimum hole size
-export const HOLE_MAX_RADIUS = 120; // Maximum hole size
-export const HOLE_GROWTH_RATE = 2; // How much hole grows per car eaten
+export const HOLE_MAX_RADIUS = 150; // Maximum hole size (increased to eat largest cars)
+export const HOLE_GROWTH_RATE = 1.5; // How much hole grows per car eaten (reduced from 3 for slower progression)
 export const HOLE_INITIAL_RADIUS = 40; // Starting hole size
+
+// Hole Eating Rules (enforces strategic progression)
+export const HOLE_MIN_RADIUS_TO_EAT = 1.35; // Hole must be 135% of car radius (hole must be bigger than car!)
 
 // Physics Configuration (Matter.js)
 export const PHYSICS_ENABLED = true;
@@ -91,12 +101,12 @@ export const CAR_RESTITUTION = 0.6; // Bounciness (0-1)
 export const CAR_DENSITY = 0.001; // Mass density
 export const WALL_RESTITUTION = 0.8; // Wall bounciness
 
-// Hole Growth & Size-Based Eating
-export const HOLE_MIN_RADIUS_TO_EAT = 0.7; // Hole must be at least 70% size of car to eat it
+// Hole Growth & Size-Based Eating (moved from above)
 
 // Level Configuration (Phase 6)
-export const LEVEL_TIME_LIMIT = 25; // Seconds to complete level
-export const LEVEL_TARGET_CARS = 8; // Cars needed to win
+export const LEVEL_TIME_LIMIT = 18; // Seconds to complete level (reduced from 25)
+export const LEVEL_TARGET_CARS = 8; // Cars needed to win (deprecated)
+export const LEVEL_TARGET_SCORE = 1000; // Score needed to win (requires many cars!)
 export const LEVEL_NUMBER = 1; // Current level
 
 // Timer Configuration (Phase 6)

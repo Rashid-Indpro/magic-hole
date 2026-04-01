@@ -25,12 +25,14 @@ import {
   INITIAL_SCORE, 
   LEVEL_TIME_LIMIT, 
   LEVEL_TARGET_CARS,
+  LEVEL_TARGET_SCORE,
   GAME_STATE,
 } from './src/config/constants';
 import Score from './src/components/Score';
 import Timer from './src/components/Timer';
 import GameStatus from './src/components/GameStatus';
 import RestartButton from './src/components/RestartButton';
+import GameRules from './src/components/GameRules';
 
 export default function App() {
   const gameEngineRef = useRef(null);
@@ -48,6 +50,26 @@ export default function App() {
   useEffect(() => {
     initializeGame();
   }, []);
+
+  /**
+   * Check for win condition when score changes
+   */
+  useEffect(() => {
+    if (gameState === GAME_STATE.PLAYING && score >= LEVEL_TARGET_SCORE) {
+      // Player won - reached target score!
+      setGameState(GAME_STATE.WIN);
+      // Update entity game states
+      if (gameEngineRef.current) {
+        const currentEntities = gameEngineRef.current.state.entities;
+        if (currentEntities.timer) {
+          currentEntities.timer.gameState = GAME_STATE.WIN;
+        }
+        if (currentEntities.levelTracker) {
+          currentEntities.levelTracker.gameState = GAME_STATE.WIN;
+        }
+      }
+    }
+  }, [score, gameState]);
 
   /**
    * Initialize or reset the game
@@ -201,6 +223,7 @@ export default function App() {
       <StatusBar hidden={true} />
       <Score score={score} />
       <Timer timeRemaining={timeRemaining} timeLimit={LEVEL_TIME_LIMIT} />
+      <GameRules visible={gameState === GAME_STATE.PLAYING} />
       <GameStatus 
         gameState={gameState} 
         score={score} 

@@ -20,12 +20,16 @@ const exitTimers = {};
  * - Detects when cars reach the bottom
  * - Triggers exit animation
  * - Removes exited cars
- * - Spawns new cars to maintain count
+ * - Spawns new cars to maintain count (only when playing)
  */
 const CarLifecycleSystem = (entities, { time }) => {
   const currentTime = Date.now();
   const carsToRemove = [];
   const carsToAdd = [];
+  
+  // Check if game is playing (from timer or levelTracker entity)
+  const isPlaying = entities.timer?.gameState === 'playing' || 
+                    entities.levelTracker?.gameState === 'playing';
   
   // Check all car entities
   Object.keys(entities).forEach(key => {
@@ -91,8 +95,10 @@ const CarLifecycleSystem = (entities, { time }) => {
     // Remove entity
     delete entities[key];
     
-    // Spawn replacement car randomly positioned (not from top)
-    carsToAdd.push(createCar(null, true, false));
+    // Spawn replacement car only if game is still playing
+    if (isPlaying) {
+      carsToAdd.push(createCar(null, true, false));
+    }
   });
   
   // Add new cars
