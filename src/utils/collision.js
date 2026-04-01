@@ -65,6 +65,11 @@ export const findCollisions = (entity, entities, threshold = 1.0) => {
     
     const otherEntity = entities[key];
     
+    // Skip entities without body (like timer, levelTracker)
+    if (!otherEntity || !otherEntity.body) {
+      return;
+    }
+    
     // Check collision based on entity types
     if (entity.body.radius && otherEntity.body.size) {
       // Circle (hole) vs Square (car)

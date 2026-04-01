@@ -7,7 +7,7 @@ import React from 'react';
 import { Text, View } from 'react-native';
 
 const Car = ({ body }) => {
-  const { position, size, icon, flipped } = body;
+  const { position, size, icon, flipped, opacity = 1 } = body;
 
   return (
     <View
@@ -20,6 +20,7 @@ const Car = ({ body }) => {
         justifyContent: 'center',
         alignItems: 'center',
         transform: [{ scaleX: flipped ? -1 : 1 }], // Flip horizontally, not rotate
+        opacity: opacity, // Support fade animation
       }}
     >
       <Text

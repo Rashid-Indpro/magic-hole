@@ -26,6 +26,9 @@ export const MIN_MOVEMENT_THRESHOLD = 0.1; // Minimum distance to move
 export const CAR_MIN_SIZE = 40; // Minimum size for car icons
 export const CAR_MAX_SIZE = 80; // Maximum size for car icons
 export const INITIAL_CAR_COUNT = 8; // Number of cars to spawn initially
+export const CAR_SPAWN_Y = -100; // Y position where cars spawn (above screen)
+export const CAR_EXIT_THRESHOLD = 50; // Distance from bottom to trigger exit animation
+export const CAR_EXIT_DURATION = 500; // Exit animation duration in ms
 
 // Car Icons (variety of vehicle emojis)
 export const CAR_ICONS = [
@@ -90,3 +93,25 @@ export const WALL_RESTITUTION = 0.8; // Wall bounciness
 
 // Hole Growth & Size-Based Eating
 export const HOLE_MIN_RADIUS_TO_EAT = 0.7; // Hole must be at least 70% size of car to eat it
+
+// Level Configuration (Phase 6)
+export const LEVEL_TIME_LIMIT = 25; // Seconds to complete level
+export const LEVEL_TARGET_CARS = 8; // Cars needed to win
+export const LEVEL_NUMBER = 1; // Current level
+
+// Timer Configuration (Phase 6)
+export const TIMER_WARNING_THRESHOLD = 10; // Seconds remaining to show warning
+export const TIMER_CRITICAL_THRESHOLD = 5; // Seconds remaining to show critical warning
+
+// Game States (Phase 6)
+export const GAME_STATE = {
+  PLAYING: 'playing',
+  WIN: 'win',
+  LOSE: 'lose',
+  PAUSED: 'paused',
+};
+
+// Animation Configuration (Phase 6)
+export const ANIMATION_DURATION = 300; // Milliseconds
+export const SCALE_ANIMATION_FACTOR = 1.2; // Scale multiplier for animations
+export const FADE_DURATION = 500; // Fade in/out duration

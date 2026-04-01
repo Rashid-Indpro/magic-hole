@@ -1,16 +1,39 @@
 /**
  * Hole Component
- * Renders the hole (black circle) on the screen
+ * Renders the hole (black circle) with subtle pulse animation
  */
 
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { Animated } from 'react-native';
 
 const Hole = ({ body }) => {
   const { position, radius, color, borderColor } = body;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+
+  // Subtle continuous pulse animation
+  useEffect(() => {
+    const pulse = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.05,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1500,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+    
+    pulse.start();
+    
+    return () => pulse.stop();
+  }, []);
 
   return (
-    <View
+    <Animated.View
       style={{
         position: 'absolute',
         left: position.x - radius,
@@ -21,6 +44,7 @@ const Hole = ({ body }) => {
         backgroundColor: color,
         borderWidth: 3,
         borderColor: borderColor,
+        transform: [{ scale: pulseAnim }],
       }}
     />
   );

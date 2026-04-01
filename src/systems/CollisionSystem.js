@@ -56,7 +56,7 @@ export const CollisionSystem = (entities, { dispatch }) => {
     return false;
   });
 
-  // If there are eatable collisions, remove entities, grow hole, and update score
+  // If there are eatable collisions, mark cars for exit, grow hole, and update score
   if (eatableCollisions.length > 0) {
     const updatedEntities = { ...entities };
     let totalPoints = 0;
@@ -65,17 +65,22 @@ export const CollisionSystem = (entities, { dispatch }) => {
     eatableCollisions.forEach(entityId => {
       const entity = updatedEntities[entityId];
       
-      // Remove physics body if it exists
-      if (entity.body && entity.body.physicsBody) {
-        removeBodyFromWorld(entity.body.physicsBody);
+      // Mark car as exiting instead of immediate removal
+      // CarLifecycleSystem will handle the exit animation and removal
+      if (entity.body && !entity.body.exiting) {
+        entity.body.exiting = true;
+        entity.body.exitStartTime = Date.now();
+        
+        // Remove physics body immediately so it stops interacting
+        if (entity.body.physicsBody) {
+          removeBodyFromWorld(entity.body.physicsBody);
+          entity.body.physicsBody = null;
+        }
+        
+        // Accumulate points
+        totalPoints += POINTS_PER_CAR;
+        carsEaten++;
       }
-      
-      // Accumulate points
-      totalPoints += POINTS_PER_CAR;
-      carsEaten++;
-      
-      // Remove the collided entity
-      delete updatedEntities[entityId];
     });
     
     // Grow the hole based on number of cars eaten

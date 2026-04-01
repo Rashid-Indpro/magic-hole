@@ -23,6 +23,14 @@ let world = null;
  * @returns {object} Physics engine and world
  */
 export const initPhysics = () => {
+  // Clear previous engine if it exists
+  if (engine) {
+    Matter.Engine.clear(engine);
+    if (world) {
+      Matter.World.clear(world, false);
+    }
+  }
+  
   // Create engine
   engine = Matter.Engine.create({
     enableSleeping: false,
@@ -44,8 +52,7 @@ export const initPhysics = () => {
   const walls = [
     // Top wall
     Matter.Bodies.rectangle(SCREEN_WIDTH / 2, -25, SCREEN_WIDTH, 50, wallOptions),
-    // Bottom wall
-    Matter.Bodies.rectangle(SCREEN_WIDTH / 2, SCREEN_HEIGHT + 25, SCREEN_WIDTH, 50, wallOptions),
+    // No bottom wall - cars exit at bottom
     // Left wall
     Matter.Bodies.rectangle(-25, SCREEN_HEIGHT / 2, 50, SCREEN_HEIGHT, wallOptions),
     // Right wall

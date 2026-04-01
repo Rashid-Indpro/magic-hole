@@ -15,8 +15,8 @@ export const setupEntities = () => {
   // Create the hole
   const hole = createHole();
   
-  // Create multiple cars
-  const cars = createCars(INITIAL_CAR_COUNT);
+  // Create multiple cars (spawn randomly across screen, not from top)
+  const cars = createCars(INITIAL_CAR_COUNT, true, false);
   
   // Return all entities in a flat object structure
   // GameEngine expects a flat object with all entities
